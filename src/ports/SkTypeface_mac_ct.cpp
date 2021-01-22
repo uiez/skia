@@ -217,12 +217,12 @@ SkUniqueCFRef<CTFontRef> SkCTFontCreateExactCopy(CTFontRef baseFont, CGFloat tex
 }
 
 CTFontRef SkTypeface_GetCTFontRef(const SkTypeface* face) {
-    return face ? (CTFontRef)face->internal_private_getCTFontRef() : nullptr;
+    return face ? (CTFontRef)face->getNativeTypeface() : nullptr;
 }
 
 static bool find_by_CTFontRef(SkTypeface* cached, void* context) {
     CTFontRef self = (CTFontRef)context;
-    CTFontRef other = (CTFontRef)cached->internal_private_getCTFontRef();
+    CTFontRef other = (CTFontRef)cached->getNativeTypeface();
 
     return CFEqual(self, other);
 }

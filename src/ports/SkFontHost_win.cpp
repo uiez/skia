@@ -270,7 +270,10 @@ public:
     static void EnsureAccessible(const SkTypeface* face) {
         call_ensure_accessible(static_cast<const LogFontTypeface*>(face)->fLogFont);
     }
-
+    void* onGetNativeTypeface(SkTypeface::NativeType *type) const override {
+        *type = SkTypeface::GDI;
+        return (void*)&fLogFont;
+    }
 protected:
     std::unique_ptr<SkStreamAsset> onOpenStream(int* ttcIndex) const override;
     sk_sp<SkTypeface> onMakeClone(const SkFontArguments& args) const override;

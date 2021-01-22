@@ -14,9 +14,8 @@ config("public_config") {
     include_dirs = [ "include" ]
   }
 }
-
-static_library("particles") {
-  if (skia_enable_particles) {
+if (skia_enable_particles) {
+  static_library("particles") {
     import("particles.gni")
     public_configs = [ ":public_config" ]
     include_dirs = [ "../../tools/timer" ]
@@ -30,4 +29,8 @@ static_library("particles") {
       "../../:our_vulkan_headers",
     ]
   }
+}else {
+  group("particles") {
+  }
 }
+

@@ -339,10 +339,23 @@ public:
         this->onGetFontDescriptor(desc, isLocal);
     }
     // PRIVATE / EXPERIMENTAL -- do not call
-    void* internal_private_getCTFontRef() const {
-        return this->onGetCTFontRef();
+    enum NativeType {
+        Unknown = 0,
+        CoreText = 1,
+        DirectWrite = 2,
+        GDI = 3,
+        FreeType = 4
+    };
+    void* getNativeTypeface() const {
+        return this->getNativeTypeface(nullptr);
     }
-
+    void* getNativeTypeface(NativeType *type) const {
+        if (type) {
+            return this->onGetNativeTypeface(type);
+        }
+        NativeType tmpType;
+        return this->onGetNativeTypeface(&tmpType);
+    }
 protected:
     explicit SkTypeface(const SkFontStyle& style, bool isFixedPitch = false);
     ~SkTypeface() override;
@@ -406,8 +419,10 @@ protected:
 
     virtual bool onComputeBounds(SkRect*) const;
 
-    virtual void* onGetCTFontRef() const { return nullptr; }
-
+    virtual void* onGetNativeTypeface(NativeType *type) const {
+        *type = NativeType::Unknown;
+        return nullptr;
+    }
 private:
     /** Retrieve detailed typeface metrics.  Used by the PDF backend.  */
     std::unique_ptr<SkAdvancedTypefaceMetrics> getAdvancedMetrics() const;

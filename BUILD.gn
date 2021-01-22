@@ -123,15 +123,15 @@ template("opts") {
       configs += skia_library_configs
     }
   } else {
-    # If not enabled, a phony empty target that swallows all otherwise unused variables.
+  # If not enabled, a phony empty target that swallows all otherwise unused variables.
     source_set(target_name) {
       check_includes = false
       forward_variables_from(invoker,
-                             "*",
-                             [
-                               "sources",
-                               "cflags",
-                             ])
+      "*",
+      [
+        "sources",
+        "cflags",
+      ])
     }
   }
 }
@@ -259,12 +259,12 @@ template("optional") {
     source_set(target_name) {
       check_includes = false
       forward_variables_from(invoker,
-                             "*",
-                             [
-                               "public_defines",
-                               "sources_when_disabled",
-                               "configs_to_remove",
-                             ])
+      "*",
+      [
+        "public_defines",
+        "sources_when_disabled",
+        "configs_to_remove",
+      ])
       all_dependent_configs = [ ":" + target_name + "_public" ]
       configs += skia_library_configs
       if (defined(invoker.configs_to_remove)) {
@@ -274,18 +274,18 @@ template("optional") {
   } else {
     source_set(target_name) {
       forward_variables_from(invoker,
-                             "*",
-                             [
-                               "public",
-                               "public_defines",
-                               "public_deps",
-                               "deps",
-                               "libs",
-                               "frameworks",
-                               "sources",
-                               "sources_when_disabled",
-                               "configs_to_remove",
-                             ])
+      "*",
+      [
+        "public",
+        "public_defines",
+        "public_deps",
+        "deps",
+        "libs",
+        "frameworks",
+        "sources",
+        "sources_when_disabled",
+        "configs_to_remove",
+      ])
       if (defined(invoker.sources_when_disabled)) {
         sources = invoker.sources_when_disabled
       }
@@ -340,8 +340,8 @@ optional("fontmgr_android_factory") {
 
 optional("fontmgr_custom") {
   enabled =
-      skia_enable_fontmgr_custom_directory ||
-      skia_enable_fontmgr_custom_embedded || skia_enable_fontmgr_custom_empty
+  skia_enable_fontmgr_custom_directory ||
+  skia_enable_fontmgr_custom_embedded || skia_enable_fontmgr_custom_empty
 
   deps = [ ":typeface_freetype" ]
   public = [ "src/ports/SkFontMgr_custom.h" ]
@@ -466,7 +466,7 @@ optional("fontmgr_mac_ct") {
 
   if (is_mac) {
     frameworks = [
-      # AppKit symbols NSFontWeightXXX may be dlsym'ed.
+    # AppKit symbols NSFontWeightXXX may be dlsym'ed.
       "AppKit.framework",
       "ApplicationServices.framework",
     ]
@@ -534,9 +534,9 @@ if (skia_lex) {
     # path that starts with target_out_dir and then uses ".." to back up into the src dir.
     outputs = [
       "$target_out_dir/" +
-          rebase_path("src/sksl/lex/SkSLLexer.h", target_out_dir),
-      # the script also modifies the corresponding .cpp file, but if we tell GN that it gets
-      # confused due to the same file being named by two different paths
+      rebase_path("src/sksl/lex/SkSLLexer.h", target_out_dir),
+    # the script also modifies the corresponding .cpp file, but if we tell GN that it gets
+    # confused due to the same file being named by two different paths
     ]
     sksllex_path = "$root_out_dir/"
     sksllex_path += "sksllex"
@@ -624,8 +624,8 @@ if (skia_compile_processors || skia_compile_sksl_tests) {
     # GN insists its outputs should go somewhere underneath target_out_dir, so we trick it with a
     # path that starts with target_out_dir and then uses ".." to back up into the src dir.
     dehydrate_sksl_outputs += [ "$target_out_dir/" + rebase_path(
-                                    "src/sksl/generated/$name.dehydrated.sksl",
-                                    target_out_dir) ]
+    "src/sksl/generated/$name.dehydrated.sksl",
+    target_out_dir) ]
   }
 
   action("dehydrate_sksl") {
@@ -658,9 +658,9 @@ if (skia_compile_processors) {
     # path that starts with target_out_dir and then uses ".." to back up into the src dir.
     skia_gpu_processor_outputs += [
       "$target_out_dir/" +
-          rebase_path("$dir/generated/$name.h", target_out_dir),
-      # the script also modifies the corresponding .cpp file, but if we tell GN that it gets
-      # confused due to the same file being named by two different paths
+      rebase_path("$dir/generated/$name.h", target_out_dir),
+    # the script also modifies the corresponding .cpp file, but if we tell GN that it gets
+    # confused due to the same file being named by two different paths
     ]
   }
 
@@ -689,7 +689,7 @@ if (skia_compile_sksl_tests) {
   import("gn/sksl_tests.gni")
 
   template("compile_sksl") {
-    # Compile the passed-in `sources` into `outputs` using skslc, with the given language/settings.
+  # Compile the passed-in `sources` into `outputs` using skslc, with the given language/settings.
     action("compile_sksl_${target_name}") {
       script = "gn/compile_sksl_tests.py"
       deps = [
@@ -704,8 +704,8 @@ if (skia_compile_sksl_tests) {
         name = get_path_info(src, "name")
         foreach(outputPattern, invoker.outputPatterns) {
           outputs += [ target_out_dir + "/" + rebase_path(
-                           dir + outputPattern[0] + name + outputPattern[1],
-                           target_out_dir) ]
+          dir + outputPattern[0] + name + outputPattern[1],
+          target_out_dir) ]
         }
       }
       args = [
@@ -734,27 +734,27 @@ if (skia_compile_sksl_tests) {
   compile_sksl("glsl_tests") {
     sources = sksl_glsl_tests_sources + sksl_glsl_settings_tests_sources
     outputPatterns = [ [
-          "/golden/",
-          ".glsl",
-        ] ]
+      "/golden/",
+      ".glsl",
+    ] ]
     lang = "--glsl"
     settings = "--settings"
   }
   compile_sksl("glsl_nosettings_tests") {
     sources = sksl_glsl_settings_tests_sources
     outputPatterns = [ [
-          "/golden/",
-          "StandaloneSettings.glsl",
-        ] ]
+      "/golden/",
+      "StandaloneSettings.glsl",
+    ] ]
     lang = "--glsl"
     settings = "--nosettings"
   }
   compile_sksl("metal_tests") {
     sources = sksl_metal_tests_sources
     outputPatterns = [ [
-          "/golden/",
-          ".metal",
-        ] ]
+      "/golden/",
+      ".metal",
+    ] ]
     lang = "--metal"
     settings = "--settings"
   }
@@ -788,7 +788,7 @@ optional("gpu") {
   public_deps = []
 
   sources =
-      skia_gpu_sources + skia_sksl_gpu_sources + skia_gpu_processor_outputs
+  skia_gpu_sources + skia_sksl_gpu_sources + skia_gpu_processor_outputs
   if (!skia_enable_ccpr) {
     sources -= skia_ccpr_sources
     sources += [ "src/gpu/ccpr/GrCoverageCountingPathRenderer_none.cpp" ]
@@ -852,7 +852,7 @@ optional("gpu") {
   }
 
   if (is_android && (skia_use_gl || skia_use_vulkan)) {
-    # this lib is required to link against AHardwareBuffer
+  # this lib is required to link against AHardwareBuffer
     if (defined(ndk_api) && ndk_api >= 26) {
       libs += [ "android" ]
     }
@@ -913,9 +913,9 @@ optional("gif") {
   enabled = !skia_use_wuffs && skia_use_libgifcodec
   _libgifcodec_gni_path = "third_party/externals/libgifcodec/libgifcodec.gni"
   if ("True" ==
-      exec_script("gn/checkpath.py",
-                  [ rebase_path(_libgifcodec_gni_path, root_build_dir) ],
-                  "trim string")) {
+  exec_script("gn/checkpath.py",
+  [ rebase_path(_libgifcodec_gni_path, root_build_dir) ],
+  "trim string")) {
     public_defines = [ "SK_USE_LIBGIFCODEC" ]
     public_include_dirs = [
       ".",
@@ -924,8 +924,8 @@ optional("gif") {
     include_dirs = public_include_dirs
     import(_libgifcodec_gni_path)
     sources = rebase_path(libgifcodec_sources + libgifcodec_public,
-                          ".",
-                          skia_libgifcodec_path)
+    ".",
+    skia_libgifcodec_path)
   }
 }
 
@@ -1126,7 +1126,7 @@ if (skia_enable_gpu && skia_generate_workarounds) {
 
     # see comments in skia_compile_processors about out dir path shenanigans.
     output_file =
-        rebase_path("include/gpu/GrDriverBugWorkaroundsAutogen.h", root_out_dir)
+    rebase_path("include/gpu/GrDriverBugWorkaroundsAutogen.h", root_out_dir)
 
     outputs = [ "$root_out_dir/$output_file" ]
     args = [
@@ -1336,7 +1336,7 @@ if (target_cpu == "wasm") {
     ]
   }
 }
-
+if (skia_enable_pathkit){
 static_library("pathkit") {
   check_includes = false
   public_configs = [ ":skia_public" ]
@@ -1403,7 +1403,7 @@ static_library("pathkit") {
     "src/utils/SkUTF.cpp",
   ]
 }
-
+}
 group("modules") {
   deps = [
     "modules/particles",
@@ -1455,8 +1455,8 @@ if (skia_enable_tools) {
     script = "gn/find_headers.py"
 
     args = [ rebase_path("//bin/gn") ] + [ rebase_path("//") ] +
-           [ rebase_path(skia_h, root_build_dir) ] +
-           rebase_path(skia_public_includes)
+    [ rebase_path(skia_h, root_build_dir) ] +
+    rebase_path(skia_public_includes)
     depfile = "$skia_h.deps"
     outputs = [ skia_h ]
   }
@@ -1540,24 +1540,24 @@ if (skia_enable_tools) {
     if (is_ios) {
       ios_app_bundle(target_name) {
         forward_variables_from(invoker,
-                               "*",
-                               [
-                                 "output_name",
-                                 "visibility",
-                                 "is_shared_library",
-                               ])
+        "*",
+        [
+          "output_name",
+          "visibility",
+          "is_shared_library",
+        ])
         testonly = true
         extra_configs = [ ":skia_private" ]
         launchscreen = "platform_tools/ios/app/LaunchScreen.storyboard"
         data_sources = [ "resources" ]
         if ("True" == exec_script("//gn/checkdir.py",
-                                  [ rebase_path("skps", root_build_dir) ],
-                                  "trim string")) {
+        [ rebase_path("skps", root_build_dir) ],
+        "trim string")) {
           data_sources += [ "skps" ]
         }
       }
     } else {
-      # !is_ios
+    # !is_ios
 
       output_dir = root_build_dir
       if (defined(invoker.is_shared_library) && invoker.is_shared_library) {
@@ -1626,7 +1626,7 @@ if (skia_enable_tools) {
       "tools/gpu/YUVUtils.cpp",
       "tools/gpu/YUVUtils.h",
       "tools/gpu/gl/GLTestContext.cpp",  # See comment below about
-                                         # GrContextFactory workaround.
+      # GrContextFactory workaround.
       "tools/gpu/mock/MockTestContext.cpp",
     ]
 
@@ -1635,7 +1635,7 @@ if (skia_enable_tools) {
 
     if (skia_use_gl) {
       sources +=
-          [ "tools/gpu/gl/command_buffer/GLTestContext_command_buffer.cpp" ]
+      [ "tools/gpu/gl/command_buffer/GLTestContext_command_buffer.cpp" ]
       if (is_ios) {
         sources += [ "tools/gpu/gl/iOS/CreatePlatformGLTestContext_iOS.mm" ]
         frameworks += [ "OpenGLES.framework" ]
@@ -1697,7 +1697,7 @@ if (skia_enable_tools) {
 
     if (is_fuchsia && using_fuchsia_sdk) {
       libs +=
-          [ "${fuchsia_sdk_path}/arch/${target_cpu}/sysroot/lib/libzircon.so" ]
+      [ "${fuchsia_sdk_path}/arch/${target_cpu}/sysroot/lib/libzircon.so" ]
     }
 
     cflags_objcc = [ "-fobjc-arc" ]
@@ -2102,7 +2102,7 @@ if (skia_enable_tools) {
     sources = [ "tools/fonts/create_test_font.cpp" ]
     deps = [ ":skia" ]
     assert_no_deps = [
-      # tool_utils requires the output of this app.
+    # tool_utils requires the output of this app.
       ":tool_utils",
     ]
   }
@@ -2209,9 +2209,9 @@ if (skia_enable_tools) {
 
   test_app("pathops_unittest") {
     sources = pathops_tests_sources + [
-                rebase_path("tests/skia_test.cpp"),
-                rebase_path("tests/Test.cpp"),
-              ]
+      rebase_path("tests/skia_test.cpp"),
+      rebase_path("tests/Test.cpp"),
+    ]
     deps = [
       ":flags",
       ":gpu_tool_utils",
@@ -2258,7 +2258,7 @@ if (skia_enable_tools) {
       }
       public_configs = [ ":skia_private" ]
       defines =
-          [ "SK_SKQP_GLOBAL_ERROR_TOLERANCE=$skia_skqp_global_error_tolerance" ]
+      [ "SK_SKQP_GLOBAL_ERROR_TOLERANCE=$skia_skqp_global_error_tolerance" ]
       sources = [
         "dm/DMGpuTestProcs.cpp",
         "tools/skqp/src/skqp.cpp",
@@ -2287,7 +2287,7 @@ if (skia_enable_tools) {
     }
   }
   if (is_fuchsia) {
-    # Build a package repository for skqp on Fuchsia.
+  # Build a package repository for skqp on Fuchsia.
     group("skqp_repo") {
       testonly = true
       deps = [ "//build/fuchsia/skqp:skqp_repo" ]
@@ -2629,7 +2629,7 @@ if (skia_enable_tools) {
     }
     test_app("mdbviz") {
       if (is_win) {
-        # on Windows we need to disable some exception handling warnings due to the Qt headers
+      # on Windows we need to disable some exception handling warnings due to the Qt headers
         cflags = [ "/Wv:18" ]  # 18 -> VS2013, 19 -> VS2015, 1910 -> VS2017
       }
       sources = [

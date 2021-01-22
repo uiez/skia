@@ -18,6 +18,7 @@ Environment Variables:
   will use the file ../DEPS relative to this script's directory.
 
   GIT_SYNC_DEPS_QUIET: if set to non-empty string, suppress messages.
+  GIT_SYNC_DEPS_LIST: a comma separated dependence list, default sync all deps
 
 Git Config:
   To disable syncing of a single repository:
@@ -213,6 +214,16 @@ def git_sync_deps(deps_file_path, command_line_os_requests, verbose):
     for other_dir in dependencies:
       if directory.startswith(other_dir + '/'):
         raise Exception('%r is parent of %r' % (other_dir, directory))
+
+  deps_list = os.environ.get('GIT_SYNC_DEPS_LIST', '')
+  if deps_list != '':
+    deps_arr = deps_list.split(',')
+    for i, _ in enumerate(deps_arr):
+        deps_arr[i] = 'third_party/externals/' + deps_arr[i].strip()
+    for k in list(dependencies.keys()):
+        if k.startswith('third_party/externals/') and (not k in deps_arr):
+          del dependencies[k]
+
   list_of_arg_lists = []
   for directory in sorted(dependencies):
     if not isinstance(dependencies[directory], str):

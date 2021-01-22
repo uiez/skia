@@ -86,6 +86,7 @@ public:
     GrGLExtensions fExtensions;
 
     bool hasExtension(const char ext[]) const { return fExtensions.has(ext); }
+    bool removeExtension(const char ext[]) { return fExtensions.remove(ext); }
 
     /**
      * The function pointers are in a struct so that we can have a compiler generated assignment

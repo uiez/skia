@@ -121,7 +121,7 @@ SkScalerContext_Mac::SkScalerContext_Mac(sk_sp<SkTypeface_Mac> typeface,
         , fDoSubPosition(SkToBool(fRec.fFlags & kSubpixelPositioning_Flag))
 
 {
-    CTFontRef ctFont = (CTFontRef)this->getTypeface()->internal_private_getCTFontRef();
+    CTFontRef ctFont = (CTFontRef)this->getTypeface()->getNativeTypeface();
     CFIndex numGlyphs = CTFontGetGlyphCount(ctFont);
     SkASSERT(numGlyphs >= 1 && numGlyphs <= 0xFFFF);
     fGlyphCount = SkToU16(numGlyphs);

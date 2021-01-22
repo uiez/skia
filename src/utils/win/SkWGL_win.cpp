@@ -6,7 +6,7 @@
  */
 
 #include "include/core/SkTypes.h"
-#if defined(SK_BUILD_FOR_WIN) && !defined(_M_ARM64)
+#if defined(SK_BUILD_FOR_WIN) && defined(SK_GL) && !defined(_M_ARM64)
 
 #include "src/utils/win/SkWGL.h"
 
