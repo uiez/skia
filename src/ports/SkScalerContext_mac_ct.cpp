@@ -121,7 +121,7 @@ SkScalerContext_Mac::SkScalerContext_Mac(sk_sp<SkTypeface_Mac> typeface,
         , fDoSubPosition(SkToBool(fRec.fFlags & kSubpixelPositioning_Flag))
 
 {
-    CTFontRef ctFont = (CTFontRef)this->getTypeface()->internal_private_getCTFontRef();
+    CTFontRef ctFont = (CTFontRef)this->getTypeface()->getNativeTypeface();
 
     // CT on (at least) 10.9 will size color glyphs down from the requested size, but not up.
     // As a result, it is necessary to know the actual device size and request that.

@@ -115,7 +115,10 @@ protected:
                                        int parameterCount) const override;
     sk_sp<SkTypeface> onMakeClone(const SkFontArguments&) const override;
 
-    void* onGetCTFontRef() const override { return (void*)fFontRef.get(); }
+    void* onGetNativeTypeface(SkTypeface::NativeType *type) const override {
+        *type = SkTypeface::CoreText;
+        return (void*)fFontRef.get();
+    }
 
 private:
     mutable std::unique_ptr<SkStreamAsset> fStream;

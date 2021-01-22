@@ -1,12 +1,11 @@
 /*
  * Copyright 2014 Google Inc.
+ * Copyright 2015 Xamarin Inc.
+ * Copyright 2017 Microsoft Corporation. All rights reserved.
  *
  * Use of this source code is governed by a BSD-style license that can be
  * found in the LICENSE file.
  */
-
-// EXPERIMENTAL EXPERIMENTAL EXPERIMENTAL EXPERIMENTAL
-// DO NOT USE -- FOR INTERNAL TESTING ONLY
 
 #ifndef sk_path_DEFINED
 #define sk_path_DEFINED
@@ -15,87 +14,29 @@
 
 SK_C_PLUS_PLUS_BEGIN_GUARD
 
-typedef enum {
-    CW_SK_PATH_DIRECTION,
-    CCW_SK_PATH_DIRECTION,
-} sk_path_direction_t;
-
-typedef struct sk_pathbuilder_t sk_pathbuilder_t;
-
-/** Create a new, empty path. */
-SK_API sk_pathbuilder_t* sk_pathbuilder_new(void);
-
-/** Release the memory used by a sk_pathbuilder_t. */
-SK_API void sk_pathbuilder_delete(sk_pathbuilder_t*);
-
-/** Set the beginning of the next contour to the point (x,y). */
-SK_API void sk_pathbuilder_move_to(sk_pathbuilder_t*, float x, float y);
-/**
-    Add a line from the last point to the specified point (x,y). If no
-    sk_pathbuilder_move_to() call has been made for this contour, the first
-    point is automatically set to (0,0).
-*/
-SK_API void sk_pathbuilder_line_to(sk_pathbuilder_t*, float x, float y);
-/**
-    Add a quadratic bezier from the last point, approaching control
-    point (x0,y0), and ending at (x1,y1). If no sk_pathbuilder_move_to() call
-    has been made for this contour, the first point is automatically
-    set to (0,0).
-*/
-SK_API void sk_pathbuilder_quad_to(sk_pathbuilder_t*, float x0, float y0, float x1, float y1);
-/**
-    Add a conic curve from the last point, approaching control point
-    (x0,y01), and ending at (x1,y1) with weight w.  If no
-    sk_pathbuilder_move_to() call has been made for this contour, the first
-    point is automatically set to (0,0).
-*/
-SK_API void sk_pathbuilder_conic_to(sk_pathbuilder_t*, float x0, float y0, float x1, float y1, float w);
-/**
-    Add a cubic bezier from the last point, approaching control points
-    (x0,y0) and (x1,y1), and ending at (x2,y2). If no
-    sk_pathbuilder_move_to() call has been made for this contour, the first
-    point is automatically set to (0,0).
-*/
-SK_API void sk_pathbuilder_cubic_to(sk_pathbuilder_t*,
-                             float x0, float y0,
-                             float x1, float y1,
-                             float x2, float y2);
-/**
-   Close the current contour. If the current point is not equal to the
-   first point of the contour, a line segment is automatically added.
-*/
-SK_API void sk_pathbuilder_close(sk_pathbuilder_t*);
-
-/**
-    Add a closed rectangle contour to the path.
-*/
-SK_API void sk_pathbuilder_add_rect(sk_pathbuilder_t*, const sk_rect_t*, sk_path_direction_t);
-/**
-    Add a closed oval contour to the path
-*/
-SK_API void sk_pathbuilder_add_oval(sk_pathbuilder_t*, const sk_rect_t*, sk_path_direction_t);
-
-/**** path *****/
-
-/**
-*  Return a Path from the builder, resetting the builder to its original empty state.
-*/
-SK_API sk_path_t* sk_pathbuilder_detach_path(sk_pathbuilder_t*);
-
-/**
- *  Return a Path from the builder. The builder reamins in its current state.
- */
-SK_API sk_path_t* sk_pathbuilder_snapshot_path(sk_pathbuilder_t*);
-
-/** Release the memory used by a sk_path_t. */
-SK_API void sk_path_delete(sk_path_t*);
-
-/**
- *  If the path is empty, return false and set the rect parameter to [0, 0, 0, 0].
- *  else return true and set the rect parameter to the bounds of the control-points
- *  of the path.
- */
-SK_API bool sk_path_get_bounds(const sk_path_t*, sk_rect_t*);
+/* Path */
+SK_C_API sk_path_t* sk_path_new(void);
+SK_C_API void sk_path_delete(sk_path_t*);
+SK_C_API void sk_path_move_to(sk_path_t*, float x, float y);
+SK_C_API void sk_path_line_to(sk_path_t*, float x, float y);
+SK_C_API void sk_path_quad_to(sk_path_t*, float x0, float y0, float x1, float y1);
+SK_C_API void sk_path_conic_to(sk_path_t*, float x0, float y0, float x1, float y1, float w);
+SK_C_API void sk_path_cubic_to(sk_path_t*, float x0, float y0, float x1, float y1, float x2, float y2);
+SK_C_API void sk_path_arc_to(sk_path_t*, float rx, float ry, float xAxisRotate, sk_path_arc_size_t largeArc, sk_path_direction_t sweep, float x, float y);
+SK_C_API void sk_path_arc_to_with_oval(sk_path_t*, const sk_rect_t* oval, float startAngle, float sweepAngle, bool forceMoveTo);
+SK_C_API void sk_path_arc_to_with_points(sk_path_t*, float x1, float y1, float x2, float y2, float radius);
+SK_C_API void sk_path_close(sk_path_t*);
+SK_C_API void sk_path_add_rect(sk_path_t*, const sk_rect_t*, sk_path_direction_t);
+SK_C_API void sk_path_add_rrect(sk_path_t*, const sk_rrect_t*, sk_path_direction_t);
+SK_C_API void sk_path_add_oval(sk_path_t*, const sk_rect_t*, sk_path_direction_t);
+SK_C_API void sk_path_add_circle(sk_path_t*, float x, float y, float radius, sk_path_direction_t dir);
+SK_C_API void sk_path_get_bounds(const sk_path_t*, sk_rect_t*);
+SK_C_API void sk_path_compute_tight_bounds(const sk_path_t*, sk_rect_t*);
+SK_C_API void sk_path_add_arc(sk_path_t* cpath, const sk_rect_t* crect, float startAngle, float sweepAngle);
+SK_C_API void sk_path_set_filltype(sk_path_t*, sk_path_filltype_t);
+SK_C_API void sk_path_add_path_offset  (sk_path_t* cpath, sk_path_t* other, float dx, float dy, sk_path_add_mode_t add_mode);
+SK_C_API void sk_path_reset (sk_path_t* cpath);
+SK_C_API bool sk_path_contains (const sk_path_t* cpath, float x, float y);
 
 SK_C_PLUS_PLUS_END_GUARD
 

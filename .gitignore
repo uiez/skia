@@ -40,6 +40,7 @@ buildtools
 third_party/externals
 
 bin/gn
+bin/gn_*
 bin/gn.exe
 bin/clang-format
 bin/clang-format.exe

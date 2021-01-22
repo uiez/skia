@@ -1,0 +1,135 @@
+templates:
+  envSetup:
+    env:
+      - >
+        ARGS_COMMON=is_component_build=true
+        is_debug=false
+        is_official_build=true
+        skia_enable_gpu=true
+        skia_enable_pdf=false
+        skia_enable_skottie=false
+        skia_use_expat=false
+        skia_use_icu=false
+        skia_use_piex=false
+        skia_use_sfntly=false
+        skia_use_zlib=false
+        skia_enable_skshaper=false
+        skia_enable_skparagraph=false
+        skia_enable_skparagraph=false
+        skia_use_dng_sdk=false
+        skia_use_harfbuzz=false
+        skia_use_icu=false
+        skia_use_libgifcodec=false
+        skia_use_libheif=false
+        skia_use_libjpeg_turbo_decode=false
+        skia_use_libjpeg_turbo_encode=false
+        skia_use_libpng_decode=false
+        skia_use_libpng_encode=false
+        skia_use_libwebp_decode=false
+        skia_use_libwebp_encode=false
+        skia_use_xps=false
+        skia_enable_svg=false
+        skia_enable_particles=false
+        skia_enable_pathkit=false
+        skia_use_x11=false
+        skia_use_egl=false
+        skia_use_webgl=false
+      - >
+        COMMON_DEFINES="-DSKIA_C_DLL",
+        "-DSK_DISABLE_REDUCE_OPLIST_SPLITTING",
+        "-DSK_DISABLE_AAA",
+        "-DSK_DISABLE_EFFECT_DESERIALIZATION",
+        "-DSK_SUPPORT_LEGACY_MATRIX_FACTORIES",
+        "-DSK_DISABLE_NEW_GR_CLIP_STACK",
+        "-DSK_DISABLE_LEGACY_SHADERCONTEXT",
+        "-DSK_DISABLE_LOWP_RASTER_PIPELINE",
+        "-DSK_FORCE_RASTER_PIPELINE_BLITTER"
+      - |
+        COMMON_DEFINES_MSVC=$COMMON_DEFINES, "-DSK_API="
+        COMMON_DEFINES_CLANG=$COMMON_DEFINES, "-DSK_API=__attribute__((visibility(\\"hidden\\")))"
+      - >
+        ARGS_LINUX_COMMON=skia_enable_fontmgr_fontconfig=true
+        skia_use_freetype=true
+        skia_use_fontconfig=true
+        skia_use_system_freetype2=true
+        cc="clang"
+        cxx="clang++"
+        target_os="linux"
+        extra_cflags=[${COMMON_DEFINES_CLANG}]
+      - >
+        ARGS_WINDOWS_COMMON=skia_enable_fontmgr_win=true
+        skia_enable_fontmgr_win_gdi=false
+        skia_use_direct3d=true
+        clang_win="${SKIA_CLANG_WIN | string.default "C:/Program Files/LLVM" | file.fromSlash}"
+        target_os="win"
+        extra_cflags=[${COMMON_DEFINES_MSVC}, "/MT", "/EHsc", "/Z7"]
+      - >
+        ARGS_MACOS_COMMON=cc="clang"
+        cxx="clang++"
+        skia_use_fonthost_mac=true
+        skia_use_metal=true
+        target_os="mac"
+        extra_cflags=[${COMMON_DEFINES_CLANG}, "-mmacosx-version-min=10.10"]
+      - >
+        ARGS_ANDROID_COMMON=cc="clang"
+        cxx="clang++"
+        ndk="${ANDROID_NDK_HOME}"
+        target_os="android"
+        skia_enable_fontmgr_android=true
+        skia_use_system_expat=false
+        skia_use_system_freetype2=false
+        skia_use_system_zlib=true
+        extra_cflags=[${COMMON_DEFINES_CLANG}]
+      - >
+        ARGS_IOS_COMMON=cc="clang"
+        cxx="clang++"
+        target_os="ios"
+        extra_cflags=[${COMMON_DEFINES_CLANG}]
+      - |
+        ARGS_X64=target_cpu="x64"
+        ARGS_X86=target_cpu="x86"
+        ARGS_ARM=target_cpu="arm"
+        ARGS_ARM64=target_cpu="arm64"
+  skiaBuild:
+    - switch:
+        value: $BUILD_OS-$BUILD_ARCH
+        cases:
+          darwin-amd64:
+            env: SKIA_BUILD_ARGS="$ARGS_COMMON $ARGS_MACOS_COMMON $ARGS_X64"
+          linux-amd64:
+            env: SKIA_BUILD_ARGS="$ARGS_COMMON $ARGS_LINUX_COMMON $ARGS_X64"
+          windows-amd64:
+            env: SKIA_BUILD_ARGS="$ARGS_COMMON $ARGS_WINDOWS_COMMON $ARGS_X64"
+          windows-386:
+            env: SKIA_BUILD_ARGS="$ARGS_COMMON $ARGS_WINDOWS_COMMON $ARGS_X86"
+    - env: |
+        SKIA_BUILD_DIR=$BUILD_OS-$BUILD_ARCH
+        GN_PATH=bin/gn${"windows .exe linux _linux darwin _darwin" | map.get $HOST_OS}
+    - if:
+        check: ${GN_PATH | file.regular | "!"}
+        actions:
+          - cmd:
+              exec: ./bin/fetch-gn
+          - if:
+              check: ${HOST_OS | "!=" "windows"}
+              actions:
+                - copy:
+                    sourceUrl: bin/gn
+                    destPath: ${GN_PATH}
+                - del: bin/gn
+    - cmd:
+        exec: ${GN_PATH} gen out/$SKIA_BUILD_DIR --args='$SKIA_BUILD_ARGS'
+    - cmd:
+        exec: ninja -C out/$SKIA_BUILD_DIR
+tasks:
+  lib:
+    description: build skia library
+    args:
+      - env: BUILD_OS
+        description: build os
+        default: ${HOST_OS}
+      - env: BUILD_ARCH
+        description: build architecture, amd64 or 386
+        default: ${HOST_ARCH}
+    actions:
+      - template: envSetup; skiaBuild

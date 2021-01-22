@@ -1,0 +1,110 @@
+name: build and release skia libraries
+
+on:
+  push:
+    branches:
+      - '*'
+
+jobs:
+  linux:
+    strategy:
+      matrix:
+        arch: [amd64]
+    runs-on: ubuntu-18.04
+    steps:
+      - name: checkout
+        uses: actions/checkout@v2
+      - uses: actions/setup-go@v2
+      - name: download tash
+        run: |
+          go get github.com/uiez/tash
+          sudo mv ~/go/bin/tash /usr/bin
+      - name: install skia build toolchain
+        run: |
+          sudo apt-get install -y ninja-build python build-essential clang
+          sudo apt-get install -y xorg-dev libgl1-mesa-dev
+      - name: build skia
+        run: tash lib -a "BUILD_OS=linux;BUILD_ARCH=${{matrix.arch}}"
+      - name: save artifact
+        uses: actions/upload-artifact@v1
+        with:
+          name: linux-${{matrix.arch}}
+          path: out/linux-${{matrix.arch}}/libskia.so
+
+  darwin:
+    strategy:
+      matrix:
+        arch: [amd64]
+    runs-on: macos-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v2
+      - uses: actions/setup-go@v2
+      - name: download tash
+        run: |
+          go get github.com/uiez/tash
+          sudo mv ~/go/bin/tash /usr/local/bin
+      - name: install skia build toolchain
+        run: |
+          brew install ninja
+      - name: build skia
+        run: tash lib -a "BUILD_OS=darwin;BUILD_ARCH=${{matrix.arch}}"
+      - name: save artifact
+        uses: actions/upload-artifact@v1
+        with:
+          name: darwin-${{matrix.arch}}
+          path: out/darwin-${{matrix.arch}}/libskia.dylib
+
+  windows:
+    strategy:
+      matrix:
+        arch: [amd64, 386]
+    runs-on: windows-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v2
+      - uses: actions/setup-go@v2
+      - name: download tash
+        shell: bash
+        run: |
+          env GOPATH=`pwd`/gopath go get github.com/uiez/tash
+          mv ./gopath/bin/tash.exe .
+          rm -rf ./gopath
+      - uses: actions/setup-python@v2
+        with:
+          python-version: '2.7.x'
+      - name: install skia build toolchain
+        shell: bash
+        run: |
+          choco install ninja llvm
+          env GIT_SYNC_DEPS_LIST=d3d12allocator,spirv-cross python tools/git-sync-deps
+      - name: build skia
+        shell: bash
+        run: |
+          ./tash.exe lib -a "BUILD_OS=windows;BUILD_ARCH=${{matrix.arch}}"
+          mv out/windows-${{matrix.arch}}/skia.dll out/windows-${{matrix.arch}}/skia-${{matrix.arch}}.dll
+      - name: save artifact
+        uses: actions/upload-artifact@v1
+        with:
+          name: windows-${{matrix.arch}}
+          path: out/windows-${{matrix.arch}}/skia-${{matrix.arch}}.dll
+
+  release:
+    runs-on: ubuntu-18.04
+    needs: [linux, darwin, windows]
+    steps:
+      - name: checkout
+        uses: actions/checkout@v2
+      - name: download artifacts
+        uses: actions/download-artifact@v2
+        with:
+          path: artifacts
+      - name: release libraries
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          assets=()
+          for asset in artifacts/*/*; do
+            assets+=("-a" "$asset")
+          done
+          hub release create "${assets[@]}" -m build-${GITHUB_SHA::12} -t ${GITHUB_SHA} build-${GITHUB_SHA::12}

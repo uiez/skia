@@ -57,7 +57,10 @@ public:
         SkTScopedComPtr<IDWriteFontFileLoader> fDWriteFontFileLoader;
         SkTScopedComPtr<IDWriteFontCollectionLoader> fDWriteFontCollectionLoader;
     };
-
+    void* onGetNativeTypeface(SkTypeface::NativeType *type) const override {
+        *type = SkTypeface::DirectWrite;
+        return (void*)fDWriteFontFace.get();
+    }
 private:
     DWriteFontTypeface(const SkFontStyle& style,
                        IDWriteFactory* factory,

@@ -1423,7 +1423,7 @@ if (target_cpu == "wasm") {
     ]
   }
 }
-
+if (skia_enable_pathkit){
 static_library("pathkit") {
   check_includes = false
   public_configs = [ ":skia_public" ]
@@ -1490,7 +1490,7 @@ static_library("pathkit") {
     "src/utils/SkUTF.cpp",
   ]
 }
-
+}
 group("modules") {
   deps = [
     "modules/particles",

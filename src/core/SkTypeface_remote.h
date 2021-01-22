@@ -120,10 +120,9 @@ protected:
         return this->glyphCount();
     }
 
-    void* onGetCTFontRef() const override {
-        SK_ABORT("Should never be called.");
+    void* onGetNativeTypeface(SkTypeface::NativeType *type) const override {
+       SK_ABORT("Should never be called.");
     }
-
 private:
     const SkFontID                                  fFontId;
     const int                                       fGlyphCount;
