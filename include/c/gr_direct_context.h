@@ -21,7 +21,7 @@ SK_C_API gr_direct_context_t* gr_direct_context_make_metal(void* device, void* q
 SK_C_API gr_direct_context_t* gr_direct_context_make_d3d(const gr_d3d_backendcontext_t *ctx);
 
 SK_C_API void gr_direct_context_unref(gr_direct_context_t* context);
-SK_C_API void gr_direct_context_flush(gr_direct_context_t* context);
+SK_C_API void gr_direct_context_flush_and_submit(gr_direct_context_t* context, bool syncCPU);
 
 // GrGLInterface
 

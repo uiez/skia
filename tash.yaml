@@ -59,7 +59,7 @@ templates:
       - >
         ARGS_WINDOWS_COMMON=skia_enable_fontmgr_win=true
         skia_enable_fontmgr_win_gdi=false
-        skia_use_direct3d=true
+        skia_use_direct3d=false
         clang_win="${SKIA_CLANG_WIN | string.default "C:/Program Files/LLVM" | file.fromSlash}"
         target_os="win"
         extra_cflags=[${COMMON_DEFINES_MSVC}, "/MT", "/EHsc", "/Z7"]

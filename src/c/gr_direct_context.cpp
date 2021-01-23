@@ -28,8 +28,8 @@ void gr_direct_context_unref(gr_direct_context_t* context) {
     SK_ONLY_GPU(SkSafeUnref(AsGrDirectContext(context)));
 }
 
-void gr_direct_context_flush(gr_direct_context_t* context) {
-    SK_ONLY_GPU(AsGrDirectContext(context)->flush());
+void gr_direct_context_flush_and_submit(gr_direct_context_t* context, bool syncCPU) {
+    SK_ONLY_GPU(AsGrDirectContext(context)->flushAndSubmit(syncCPU));
 }
 
 

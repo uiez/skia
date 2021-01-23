@@ -23,7 +23,7 @@ SK_C_API sk_surface_t* sk_surface_new_backend_render_target(gr_direct_context_t*
 
 SK_C_API void sk_surface_unref(sk_surface_t*);
 SK_C_API sk_canvas_t* sk_surface_get_canvas(sk_surface_t*);
-SK_C_API void sk_surface_flush_and_submit(sk_surface_t* csurf);
+SK_C_API void sk_surface_flush_and_submit(sk_surface_t* csurf, bool syncCPU);
 
 // surface props
 
