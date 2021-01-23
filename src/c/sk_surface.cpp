@@ -32,8 +32,8 @@ void sk_surface_unref(sk_surface_t* csurf) {
 sk_canvas_t* sk_surface_get_canvas(sk_surface_t* csurf) {
     return ToCanvas(AsSurface(csurf)->getCanvas());
 }
-void sk_surface_flush_and_submit(sk_surface_t* csurf) {
-    AsSurface(csurf)->flushAndSubmit();
+void sk_surface_flush_and_submit(sk_surface_t* csurf, bool syncCPU) {
+    AsSurface(csurf)->flushAndSubmit(syncCPU);
 }
 sk_surface_t* sk_surface_new_backend_render_target(gr_direct_context_t* context, const gr_backendrendertarget_t* target, gr_surfaceorigin_t origin, sk_colortype_t colorType, sk_colorspace_t* colorspace, const sk_surfaceprops_t* props) {
     return ToSurface(SkSurface::MakeFromBackendRenderTarget(AsGrDirectContext(context), *AsGrBackendRenderTarget(target), (GrSurfaceOrigin)origin, (SkColorType)colorType, sk_ref_sp(AsColorSpace(colorspace)), AsSurfaceProps(props)).release());
