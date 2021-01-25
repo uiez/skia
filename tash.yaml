@@ -109,7 +109,7 @@ templates:
         check: ${GN_PATH | file.regular | "!"}
         actions:
           - cmd:
-              exec: ./bin/fetch-gn
+              exec: python ./bin/fetch-gn
           - if:
               check: ${HOST_OS | "!=" "windows"}
               actions:
@@ -118,9 +118,9 @@ templates:
                     destPath: ${GN_PATH}
                 - del: bin/gn
     - cmd:
-        exec: ${GN_PATH} gen out/$SKIA_BUILD_DIR --args='$SKIA_BUILD_ARGS'
-    - cmd:
-        exec: ninja -C out/$SKIA_BUILD_DIR
+        exec: |
+          ${GN_PATH} gen out/$SKIA_BUILD_DIR --args='$SKIA_BUILD_ARGS'
+          ninja -C out/$SKIA_BUILD_DIR
 tasks:
   lib:
     description: build skia library
