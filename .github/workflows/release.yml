@@ -77,7 +77,7 @@ jobs:
         shell: bash
         run: |
           choco install ninja llvm
-          env GIT_SYNC_DEPS_LIST=d3d12allocator,spirv-cross python tools/git-sync-deps
+#      env GIT_SYNC_DEPS_LIST=angle2,zlib python tools/git-sync-deps
       - name: build skia
         shell: bash
         run: |
