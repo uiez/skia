@@ -47,6 +47,7 @@ jobs:
       - name: install skia build toolchain
         run: |
           sudo apt-get install -y ninja-build python build-essential
+          env GIT_SYNC_DEPS_LIST=freetype,libpng python tools/git-sync-deps
       - name: build skia
         run: |
           tash lib -a "BUILD_OS=android;BUILD_ARCH=${{matrix.arch}}"
