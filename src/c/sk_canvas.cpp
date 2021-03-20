@@ -20,13 +20,9 @@ void sk_canvas_clear(sk_canvas_t* ccanvas, sk_color_t color) {
     AsCanvas(ccanvas)->clear(color);
 }
 
-void sk_canvas_draw_bitmap_rect(sk_canvas_t* ccanvas, const sk_bitmap_t* cbitmap, const sk_rect_t* csrcR, const sk_rect_t* cdstR, const sk_paint_t* cpaint) {
-    if (csrcR) {
-        AsCanvas(ccanvas)->drawBitmapRect(*AsBitmap(cbitmap), *AsRect(csrcR), *AsRect(cdstR), AsPaint(cpaint));
-    }
-    else {
-        AsCanvas(ccanvas)->drawBitmapRect(*AsBitmap(cbitmap), *AsRect(cdstR), AsPaint(cpaint));
-    }
+void sk_canvas_draw_immutable_bitmap_rect(sk_canvas_t* ccanvas, const sk_bitmap_t* cbitmap, const sk_rect_t* cdstR, const sk_paint_t* cpaint) {
+    sk_sp<SkImage> img = AsBitmap(cbitmap)->asImage();
+    AsCanvas(ccanvas)->drawImageRect(img, *AsRect(cdstR), SkSamplingOptions(), AsPaint(cpaint));
 }
 
 void sk_canvas_set_matrix(sk_canvas_t* ccanvas, const sk_matrix_t* cmatrix) {

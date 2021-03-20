@@ -1423,7 +1423,7 @@ if (target_cpu == "wasm") {
     ]
   }
 }
-if (skia_enable_pathkit){
+if (!skia_minimal_build) {
 static_library("pathkit") {
   check_includes = false
   public_configs = [ ":skia_public" ]
@@ -3217,8 +3217,10 @@ if (is_ios && skia_enable_skottie && !skia_enable_flutter_defines) {
   }
 }
 
+if (!skia_minimal_build) {
 executable("skia_c_api_example") {
   sources = [ "experimental/c-api-example/skia-c-example.c" ]
   include_dirs = [ "." ]
   deps = [ ":skia" ]
+}
 }

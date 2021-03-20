@@ -30,10 +30,11 @@ templates:
         skia_use_xps=false
         skia_enable_svg=false
         skia_enable_particles=false
-        skia_enable_pathkit=false
         skia_use_x11=false
         skia_use_egl=false
         skia_use_webgl=false
+        skia_enable_nvpr=false
+        skia_minimal_build=true
       - >
         COMMON_DEFINES="-DSKIA_C_DLL",
         "-DSK_DISABLE_REDUCE_OPLIST_SPLITTING",
@@ -79,7 +80,6 @@ templates:
         skia_use_system_expat=false
         skia_use_system_freetype2=false
         skia_use_system_zlib=true
-        skia_enable_nvpr=false
         skia_use_system_libpng=false
         extra_cflags=[${COMMON_DEFINES_CLANG}]
       - >

@@ -26,6 +26,14 @@ void sk_bitmap_get_info(sk_bitmap_t* cbitmap, sk_imageinfo_t* info) {
     *info = ToImageInfo(AsBitmap(cbitmap)->info());
 }
 
+void sk_bitmap_set_immutable(sk_bitmap_t* cbitmap) {
+    AsBitmap(cbitmap)->setImmutable();
+}
+
+bool sk_bitmap_is_immutable(sk_bitmap_t* cbitmap) {
+    return AsBitmap(cbitmap)->isImmutable();
+}
+
 void* sk_bitmap_get_pixels(sk_bitmap_t* cbitmap, size_t* length) {
     SkBitmap* bmp = AsBitmap(cbitmap);
     *length = bmp->computeByteSize();

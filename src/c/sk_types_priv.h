@@ -12,6 +12,7 @@
 
 #include "include/c/sk_types.h"
 #include "include/core/SkTypes.h" // required to make sure SK_SUPPORT_GPU is defined
+#include "include/effects/SkImageFilters.h" // required to make sure SK_SUPPORT_GPU is defined
 
 #define SK_SKIP_ARG__(keep, skip, ...) skip
 #define SK_SKIP_ARG_(args) SK_SKIP_ARG__ args
@@ -135,9 +136,6 @@ DEF_STRUCT_MAP(GrGLInterface, gr_glinterface_t, GrGLInterface)
 #include "include/core/SkColor.h"
 DEF_MAP(SkColor4f, sk_color4f_t, Color4f)
 
-#include "include/core/SkImageFilter.h"
-DEF_MAP(SkImageFilter::CropRect, sk_imagefilter_croprect_t, ImageFilterCropRect)
-
 #include "include/core/SkFontMetrics.h"
 DEF_MAP(SkFontMetrics, sk_fontmetrics_t, FontMetrics)
 
@@ -193,10 +191,10 @@ static inline sk_imageinfo_t ToImageInfo(const SkImageInfo info) {
         (sk_alphatype_t)info.alphaType(),
     };
 }
-static inline const SkImageInfo* ToImageInfo(const sk_imageinfo_t* cinfo) {
+static inline const SkImageInfo* AsImageInfo(sk_imageinfo_t* cinfo) {
     return reinterpret_cast<const SkImageInfo*>(cinfo);
 }
-static inline sk_imageinfo_t* AsImageInfo(SkImageInfo* info) {
+static inline sk_imageinfo_t* ToImageInfo(SkImageInfo* info) {
     return reinterpret_cast<sk_imageinfo_t*>(info);
 }
 
@@ -218,6 +216,13 @@ static inline sk_textblob_builder_runbuffer_t ToTextBlobBuilderRunBuffer(const S
     };
 }
 
+static inline SkImageFilters::CropRect AsImageFiltersCropRect(const sk_rect_t *rect) {
+    if (!rect) {
+        return SkImageFilters::CropRect();
+    }
+
+    return SkImageFilters::CropRect(AsRect(rect));
+}
 #if SK_SUPPORT_GPU
 // GPU specific
 
