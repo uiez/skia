@@ -79,12 +79,12 @@ jobs:
       - name: build skia
         run: |
           tash lib -a "BUILD_OS=darwin;BUILD_ARCH=${{matrix.arch}}"
-          mv out/darwin-${{matrix.arch}}/libskia.so out/darwin-${{matrix.arch}}/libskia-darwin-${{matrix.arch}}.so
+          mv out/darwin-${{matrix.arch}}/libskia.dylib out/darwin-${{matrix.arch}}/libskia-darwin-${{matrix.arch}}.dylib
       - name: save artifact
         uses: actions/upload-artifact@v1
         with:
           name: darwin-${{matrix.arch}}
-          path: out/darwin-${{matrix.arch}}/libskia-darwin-${{matrix.arch}}.so
+          path: out/darwin-${{matrix.arch}}/libskia-darwin-${{matrix.arch}}.dylib
 
   windows:
     strategy:
