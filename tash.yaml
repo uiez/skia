@@ -36,7 +36,7 @@ templates:
         skia_enable_nvpr=false
         skia_minimal_build=true
       - >
-        COMMON_DEFINES="-DSKIA_C_DLL",
+        COMMON_CFLAGS="-DSKIA_C_DLL",
         "-DSK_DISABLE_REDUCE_OPLIST_SPLITTING",
         "-DSK_DISABLE_AAA",
         "-DSK_DISABLE_EFFECT_DESERIALIZATION",
@@ -46,8 +46,8 @@ templates:
         "-DSK_DISABLE_LOWP_RASTER_PIPELINE",
         "-DSK_FORCE_RASTER_PIPELINE_BLITTER"
       - |
-        COMMON_DEFINES_MSVC=$COMMON_DEFINES, "-DSK_API="
-        COMMON_DEFINES_CLANG=$COMMON_DEFINES, "-DSK_API=__attribute__((visibility(\\"hidden\\")))"
+        COMMON_CFLAGS_MSVC=$COMMON_CFLAGS, "-DSK_API="
+        COMMON_CFLAGS_CLANG=$COMMON_CFLAGS, "-DSK_API=__attribute__((visibility(\\"hidden\\")))"
       - >
         ARGS_LINUX_COMMON=skia_enable_fontmgr_fontconfig=true
         skia_use_freetype=true
@@ -56,21 +56,21 @@ templates:
         cc="clang"
         cxx="clang++"
         target_os="linux"
-        extra_cflags=[${COMMON_DEFINES_CLANG}]
+        extra_cflags=[${COMMON_CFLAGS_CLANG}]
       - >
         ARGS_WINDOWS_COMMON=skia_enable_fontmgr_win=true
         skia_enable_fontmgr_win_gdi=false
         skia_use_direct3d=false
         clang_win="${SKIA_CLANG_WIN | string.default "C:/Program Files/LLVM" | file.fromSlash}"
         target_os="win"
-        extra_cflags=[${COMMON_DEFINES_MSVC}, "/MT", "/EHsc", "/Z7"]
+        extra_cflags=[${COMMON_CFLAGS_MSVC}, "/MT", "/EHsc", "/Z7"]
       - >
         ARGS_DARWIN_COMMON=cc="clang"
         cxx="clang++"
         skia_use_fonthost_mac=true
         skia_use_metal=true
         target_os="mac"
-        extra_cflags=[${COMMON_DEFINES_CLANG}, "-mmacosx-version-min=10.10"]
+        extra_cflags=[${COMMON_CFLAGS_CLANG}, "-mmacosx-version-min=10.10"]
       - >
         ARGS_ANDROID_COMMON=cc="clang"
         cxx="clang++"
@@ -81,12 +81,12 @@ templates:
         skia_use_system_freetype2=false
         skia_use_system_zlib=true
         skia_use_system_libpng=false
-        extra_cflags=[${COMMON_DEFINES_CLANG}]
+        extra_cflags=[${COMMON_CFLAGS_CLANG}]
       - >
         ARGS_IOS_COMMON=cc="clang"
         cxx="clang++"
         target_os="ios"
-        extra_cflags=[${COMMON_DEFINES_CLANG}]
+        extra_cflags=[${COMMON_CFLAGS_CLANG}]
       - |
         ARGS_AMD64=target_cpu="x64"
         ARGS_386=target_cpu="x86"

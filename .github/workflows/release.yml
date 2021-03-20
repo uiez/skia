@@ -24,12 +24,14 @@ jobs:
           sudo apt-get install -y ninja-build python build-essential
           sudo apt-get install -y xorg-dev libgl1-mesa-dev
       - name: build skia
-        run: tash lib -a "BUILD_OS=linux;BUILD_ARCH=${{matrix.arch}}"
+        run: |
+          tash lib -a "BUILD_OS=linux;BUILD_ARCH=${{matrix.arch}}"
+          mv out/linux-${{matrix.arch}}/libskia.so out/linux-${{matrix.arch}}/libskia-linux-${{matrix.arch}}.so
       - name: save artifact
         uses: actions/upload-artifact@v1
         with:
           name: linux-${{matrix.arch}}
-          path: out/linux-${{matrix.arch}}/libskia.so
+          path: out/linux-${{matrix.arch}}/libskia-linux-${{matrix.arch}}.so
 
   android:
     strategy:
@@ -51,12 +53,12 @@ jobs:
       - name: build skia
         run: |
           tash lib -a "BUILD_OS=android;BUILD_ARCH=${{matrix.arch}}"
-          mv out/android-${{matrix.arch}}/libskia.so out/android-${{matrix.arch}}/libskia-${{matrix.arch}}.so
+          mv out/android-${{matrix.arch}}/libskia.so out/android-${{matrix.arch}}/libskia-android-${{matrix.arch}}.so
       - name: save artifact
         uses: actions/upload-artifact@v1
         with:
           name: android-${{matrix.arch}}
-          path: out/android-${{matrix.arch}}/libskia-${{matrix.arch}}.so
+          path: out/android-${{matrix.arch}}/libskia-android-${{matrix.arch}}.so
 
   darwin:
     strategy:
@@ -75,12 +77,14 @@ jobs:
         run: |
           brew install ninja
       - name: build skia
-        run: tash lib -a "BUILD_OS=darwin;BUILD_ARCH=${{matrix.arch}}"
+        run: |
+          tash lib -a "BUILD_OS=darwin;BUILD_ARCH=${{matrix.arch}}"
+          mv out/darwin-${{matrix.arch}}/libskia.so out/darwin-${{matrix.arch}}/libskia-darwin-${{matrix.arch}}.so
       - name: save artifact
         uses: actions/upload-artifact@v1
         with:
           name: darwin-${{matrix.arch}}
-          path: out/darwin-${{matrix.arch}}/libskia.dylib
+          path: out/darwin-${{matrix.arch}}/libskia-darwin-${{matrix.arch}}.so
 
   windows:
     strategy:
@@ -109,12 +113,12 @@ jobs:
         shell: bash
         run: |
           ./tash.exe lib -a "BUILD_OS=windows;BUILD_ARCH=${{matrix.arch}}"
-          mv out/windows-${{matrix.arch}}/skia.dll out/windows-${{matrix.arch}}/skia-${{matrix.arch}}.dll
+          mv out/windows-${{matrix.arch}}/skia.dll out/windows-${{matrix.arch}}/libskia-windows-${{matrix.arch}}.dll
       - name: save artifact
         uses: actions/upload-artifact@v1
         with:
           name: windows-${{matrix.arch}}
-          path: out/windows-${{matrix.arch}}/skia-${{matrix.arch}}.dll
+          path: out/windows-${{matrix.arch}}/libskia-windows-${{matrix.arch}}.dll
 
   release:
     runs-on: ubuntu-18.04
