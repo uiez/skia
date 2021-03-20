@@ -22,6 +22,7 @@ SK_C_API gr_direct_context_t* gr_direct_context_make_d3d(const gr_d3d_backendcon
 
 SK_C_API void gr_direct_context_unref(gr_direct_context_t* context);
 SK_C_API void gr_direct_context_flush_and_submit(gr_direct_context_t* context, bool syncCPU);
+SK_C_API void gr_direct_context_set_resource_cache_limit(gr_direct_context_t* context, size_t maxResourceBytes);
 
 // GrGLInterface
 

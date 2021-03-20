@@ -32,6 +32,9 @@ void gr_direct_context_flush_and_submit(gr_direct_context_t* context, bool syncC
     SK_ONLY_GPU(AsGrDirectContext(context)->flushAndSubmit(syncCPU));
 }
 
+void gr_direct_context_set_resource_cache_limit(gr_direct_context_t* context, size_t maxResourceBytes) {
+    SK_ONLY_GPU(AsGrDirectContext(context)->setResourceCacheLimit(maxResourceBytes));
+}
 
 // GrGLInterface
 

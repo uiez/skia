@@ -59,12 +59,12 @@ templates:
       - >
         ARGS_WINDOWS_COMMON=skia_enable_fontmgr_win=true
         skia_enable_fontmgr_win_gdi=false
-        skia_use_direct3d=false
+        skia_use_direct3d=true
         clang_win="${SKIA_CLANG_WIN | string.default "C:/Program Files/LLVM" | file.fromSlash}"
         target_os="win"
         extra_cflags=[${COMMON_DEFINES_MSVC}, "/MT", "/EHsc", "/Z7"]
       - >
-        ARGS_MACOS_COMMON=cc="clang"
+        ARGS_DARWIN_COMMON=cc="clang"
         cxx="clang++"
         skia_use_fonthost_mac=true
         skia_use_metal=true
@@ -79,6 +79,8 @@ templates:
         skia_use_system_expat=false
         skia_use_system_freetype2=false
         skia_use_system_zlib=true
+        skia_enable_nvpr=false
+        skia_use_system_libpng=false
         extra_cflags=[${COMMON_DEFINES_CLANG}]
       - >
         ARGS_IOS_COMMON=cc="clang"
@@ -86,23 +88,15 @@ templates:
         target_os="ios"
         extra_cflags=[${COMMON_DEFINES_CLANG}]
       - |
-        ARGS_X64=target_cpu="x64"
-        ARGS_X86=target_cpu="x86"
+        ARGS_AMD64=target_cpu="x64"
+        ARGS_386=target_cpu="x86"
         ARGS_ARM=target_cpu="arm"
         ARGS_ARM64=target_cpu="arm64"
   skiaBuild:
-    - switch:
-        value: $BUILD_OS-$BUILD_ARCH
-        cases:
-          darwin-amd64:
-            env: SKIA_BUILD_ARGS="$ARGS_COMMON $ARGS_MACOS_COMMON $ARGS_X64"
-          linux-amd64:
-            env: SKIA_BUILD_ARGS="$ARGS_COMMON $ARGS_LINUX_COMMON $ARGS_X64"
-          windows-amd64:
-            env: SKIA_BUILD_ARGS="$ARGS_COMMON $ARGS_WINDOWS_COMMON $ARGS_X64"
-          windows-386:
-            env: SKIA_BUILD_ARGS="$ARGS_COMMON $ARGS_WINDOWS_COMMON $ARGS_X86"
     - env: |
+        SKIA_OS_ARGS_NAME=ARGS_${BUILD_OS | string.transform upper}_COMMON
+        SKIA_ARCH_ARGS_NAME=ARGS_${BUILD_ARCH | string.transform upper}
+        SKIA_BUILD_ARGS="$ARGS_COMMON ${SKIA_OS_ARGS_NAME | var.resolve} ${SKIA_ARCH_ARGS_NAME | var.resolve}"
         SKIA_BUILD_DIR=$BUILD_OS-$BUILD_ARCH
         GN_PATH=bin/gn${"windows .exe linux _linux darwin _darwin" | map.get $HOST_OS}
     - if:
@@ -121,6 +115,13 @@ templates:
         exec: |
           ${GN_PATH} gen out/$SKIA_BUILD_DIR --args='$SKIA_BUILD_ARGS'
           ninja -C out/$SKIA_BUILD_DIR
+    - if:
+        check: ${BUILD_OS | == android }
+        actions:
+          cmd:
+            exec: |
+              $ANDROID_NDK_HOME/toolchains/llvm/prebuilt/${HOST_OS}-${"amd64 x86_64 368 x86" | map.get $HOST_ARCH}/bin/${"arm arm-linux-androideabi-strip arm64 aarch64-linux-android-strip 386 i686-linux-android-strip amd64 x86_64-linux-android-strip" | map.get $BUILD_ARCH} out/$SKIA_BUILD_DIR/libskia.so
+
 tasks:
   lib:
     description: build skia library
