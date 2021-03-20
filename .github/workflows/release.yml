@@ -17,7 +17,7 @@ jobs:
       - uses: actions/setup-go@v2
       - name: download tash
         run: |
-          go get github.com/uiez/tash
+          go get github.com/uiez/tash@latest
           sudo mv ~/go/bin/tash /usr/bin
       - name: install skia build toolchain
         run: |
@@ -42,7 +42,7 @@ jobs:
       - uses: actions/setup-go@v2
       - name: download tash
         run: |
-          go get github.com/uiez/tash
+          go get github.com/uiez/tash@latest
           sudo mv ~/go/bin/tash /usr/bin
       - name: install skia build toolchain
         run: |
@@ -68,7 +68,7 @@ jobs:
       - uses: actions/setup-go@v2
       - name: download tash
         run: |
-          go get github.com/uiez/tash
+          go get github.com/uiez/tash@latest
           sudo mv ~/go/bin/tash /usr/local/bin
       - name: install skia build toolchain
         run: |
@@ -93,7 +93,7 @@ jobs:
       - name: download tash
         shell: bash
         run: |
-          env GOPATH=`pwd`/gopath go get github.com/uiez/tash
+          env GOPATH=`pwd`/gopath go get github.com/uiez/tash@latest
           mv ./gopath/bin/tash.exe .
           rm -rf ./gopath
       - uses: actions/setup-python@v2
