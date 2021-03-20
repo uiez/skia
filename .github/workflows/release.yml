@@ -21,7 +21,7 @@ jobs:
           sudo mv ~/go/bin/tash /usr/bin
       - name: install skia build toolchain
         run: |
-          sudo apt-get install -y ninja-build python build-essential clang
+          sudo apt-get install -y ninja-build python build-essential
           sudo apt-get install -y xorg-dev libgl1-mesa-dev
       - name: build skia
         run: tash lib -a "BUILD_OS=linux;BUILD_ARCH=${{matrix.arch}}"
@@ -30,6 +30,32 @@ jobs:
         with:
           name: linux-${{matrix.arch}}
           path: out/linux-${{matrix.arch}}/libskia.so
+
+  android:
+    strategy:
+      matrix:
+        arch: [amd64, 386, arm, arm64]
+    runs-on: ubuntu-18.04
+    steps:
+      - name: checkout
+        uses: actions/checkout@v2
+      - uses: actions/setup-go@v2
+      - name: download tash
+        run: |
+          go get github.com/uiez/tash
+          sudo mv ~/go/bin/tash /usr/bin
+      - name: install skia build toolchain
+        run: |
+          sudo apt-get install -y ninja-build python build-essential
+      - name: build skia
+        run: |
+          tash lib -a "BUILD_OS=android;BUILD_ARCH=${{matrix.arch}}"
+          mv out/android-${{matrix.arch}}/libskia.so out/android-${{matrix.arch}}/libskia-${{matrix.arch}}.so
+      - name: save artifact
+        uses: actions/upload-artifact@v1
+        with:
+          name: android-${{matrix.arch}}
+          path: out/android-${{matrix.arch}}/libskia-${{matrix.arch}}.so
 
   darwin:
     strategy:

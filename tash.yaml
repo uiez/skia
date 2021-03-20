@@ -132,5 +132,7 @@ tasks:
       - env: BUILD_ARCH
         description: build architecture, amd64 or 386
         default: ${HOST_ARCH}
+      - env: ANDROID_NDK_HOME
+        description: android ndk path
     actions:
       - template: envSetup; skiaBuild

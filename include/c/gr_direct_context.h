@@ -17,7 +17,7 @@ SK_C_PLUS_PLUS_BEGIN_GUARD
 // GrContext
 
 SK_C_API gr_direct_context_t* gr_direct_context_make_gl(const gr_glinterface_t* glInterface);
-SK_C_API gr_direct_context_t* gr_direct_context_make_metal(void* device, void* queue);
+SK_C_API gr_direct_context_t* gr_direct_context_make_metal(const gr_metal_backendcontext_t *ctx);
 SK_C_API gr_direct_context_t* gr_direct_context_make_d3d(const gr_d3d_backendcontext_t *ctx);
 
 SK_C_API void gr_direct_context_unref(gr_direct_context_t* context);

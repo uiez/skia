@@ -37,6 +37,7 @@
 #    endif
 #    if SK_METAL
 #        include "include/gpu/mtl/GrMtlTypes.h"
+#        include "include/gpu/mtl/GrMtlBackendContext.h"
 #        define SK_ONLY_METAL(...) SK_FIRST_ARG(__VA_ARGS__)
 #    else
 #        define SK_ONLY_METAL(...) SK_SKIP_ARG(__VA_ARGS__)
@@ -229,6 +230,13 @@ static inline SkImageFilters::CropRect AsImageFiltersCropRect(const sk_rect_t *r
 
 #if SK_METAL
 
+static inline GrMtlBackendContext AsGrMtlBackendContext(const gr_metal_backendcontext_t* context) {
+    GrMtlBackendContext ctx = {};
+    ctx.fDevice.retain((GrMTLHandle)(context->fDevice));
+    ctx.fQueue.retain((GrMTLHandle)(context->fQueue));
+    return ctx;
+}
+
 static inline GrMtlTextureInfo AsGrMtlTextureInfo(const gr_metal_textureinfo_t* mtlInfo) {
     GrMtlTextureInfo info;
     info.fTexture.retain(mtlInfo->fTexture);
@@ -241,9 +249,9 @@ static inline GrMtlTextureInfo AsGrMtlTextureInfo(const gr_metal_textureinfo_t* 
 
 static inline GrD3DBackendContext AsGrD3DBackendContext(const gr_d3d_backendcontext_t* context) {
     GrD3DBackendContext ctx = {};
-    ctx.fAdapter.reset((IDXGIAdapter1*)context->fAdapter);
-    ctx.fDevice.reset((ID3D12Device*)context->fDevice);
-    ctx.fQueue.reset((ID3D12CommandQueue*)context->fQueue);
+    ctx.fAdapter.retain((IDXGIAdapter1*)context->fAdapter);
+    ctx.fDevice.retain((ID3D12Device*)context->fDevice);
+    ctx.fQueue.retain((ID3D12CommandQueue*)context->fQueue);
     ctx.fProtectedContext = context->fProtectedContext ? GrProtected::kYes : GrProtected::kNo;
     return ctx;
 }

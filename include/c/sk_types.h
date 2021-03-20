@@ -393,6 +393,10 @@ typedef struct {
 } gr_gl_framebufferinfo_t;
 
 typedef struct {
+    const void* fDevice;
+    const void* fQueue;
+} gr_metal_backendcontext_t;
+typedef struct {
     const void* fTexture;
 } gr_metal_textureinfo_t;
 

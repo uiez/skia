@@ -17,9 +17,10 @@ gr_direct_context_t* gr_direct_context_make_gl(const gr_glinterface_t* glInterfa
     return SK_ONLY_GL(ToGrDirectContext(GrDirectContext::MakeGL(sk_ref_sp(AsGrGLInterface(glInterface))).release()), nullptr);
 }
 
-gr_direct_context_t* gr_direct_context_make_metal(void* device, void* queue) {
-    return SK_ONLY_METAL(ToGrDirectContext(GrDirectContext::MakeMetal(device, queue).release()), nullptr);
+gr_direct_context_t* gr_direct_context_make_metal(const gr_metal_backendcontext_t *ctx) {
+    return SK_ONLY_METAL(ToGrDirectContext(GrDirectContext::MakeMetal(AsGrMtlBackendContext(ctx)).release()), nullptr);
 }
+
 gr_direct_context_t* gr_direct_context_make_d3d(const gr_d3d_backendcontext_t *ctx) {
     return SK_ONLY_D3D(ToGrDirectContext(GrDirectContext::MakeDirect3D(AsGrD3DBackendContext(ctx)).release()), nullptr);
 }
