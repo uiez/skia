@@ -22,7 +22,11 @@ void sk_path_set_filltype(sk_path_t* cpath, sk_path_filltype_t cfilltype) {
 }
 
 void sk_path_reset (sk_path_t* cpath) {
-    AsPath (cpath)->reset ();
+    AsPath (cpath)->reset();
+}
+
+void sk_path_rewind (sk_path_t* cpath) {
+    AsPath (cpath)->rewind();
 }
 
 void sk_path_add_path_offset (sk_path_t* cpath, sk_path_t* other, float dx, float dy, sk_path_add_mode_t add_mode) {

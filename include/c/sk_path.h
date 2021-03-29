@@ -35,7 +35,8 @@ SK_C_API void sk_path_compute_tight_bounds(const sk_path_t*, sk_rect_t*);
 SK_C_API void sk_path_add_arc(sk_path_t* cpath, const sk_rect_t* crect, float startAngle, float sweepAngle);
 SK_C_API void sk_path_set_filltype(sk_path_t*, sk_path_filltype_t);
 SK_C_API void sk_path_add_path_offset  (sk_path_t* cpath, sk_path_t* other, float dx, float dy, sk_path_add_mode_t add_mode);
-SK_C_API void sk_path_reset (sk_path_t* cpath);
+SK_C_API void sk_path_reset(sk_path_t* cpath);
+SK_C_API void sk_path_rewind(sk_path_t* cpath);
 SK_C_API bool sk_path_contains (const sk_path_t* cpath, float x, float y);
 
 SK_C_PLUS_PLUS_END_GUARD

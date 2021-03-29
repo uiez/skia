@@ -27,7 +27,7 @@ void sk_typeface_unref(sk_typeface_t* typeface) {
 sk_font_id_t sk_typeface_get_unique_id(const sk_typeface_t* typeface) {
     return (sk_font_id_t)AsTypeface(typeface)->uniqueID();
 }
-sk_fontstyle_t* sk_typeface_get_fontstyle(const sk_typeface_t* typeface) {
+sk_fontstyle_t* sk_typeface_copy_fontstyle(const sk_typeface_t* typeface) {
     SkFontStyle fs = AsTypeface(typeface)->fontStyle();
     return ToFontStyle(new SkFontStyle(fs.weight(), fs.width(), fs.slant()));
 }

@@ -95,6 +95,7 @@ skia_core_public = [
 ]
 
 skia_core_sources = [
+  "$_include/c/sk_graphics.h",
   "$_include/c/sk_bitmap.h",
   "$_include/c/sk_canvas.h",
   "$_include/c/sk_colorfilter.h",
@@ -114,6 +115,7 @@ skia_core_sources = [
   "$_include/c/sk_typeface.h",
   "$_include/c/sk_types.h",
   "$_include/c/gr_direct_context.h",
+  "$_src/c/sk_graphics.cpp",
   "$_src/c/sk_bitmap.cpp",
   "$_src/c/sk_canvas.cpp",
   "$_src/c/sk_colorfilter.cpp",
@@ -134,6 +136,7 @@ skia_core_sources = [
   "$_src/c/sk_textblob.cpp",
   "$_src/c/sk_typeface.cpp",
   "$_src/c/sk_types_priv.h",
+  "$_src/c/sk_priv.cpp",
   "$_src/c/gr_direct_context.cpp",
 
   "$_src/core/Sk4px.h",

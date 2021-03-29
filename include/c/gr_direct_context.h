@@ -24,6 +24,8 @@ SK_C_API void gr_direct_context_unref(gr_direct_context_t* context);
 SK_C_API void gr_direct_context_flush_and_submit(gr_direct_context_t* context, bool syncCPU);
 SK_C_API void gr_direct_context_set_resource_cache_limit(gr_direct_context_t* context, size_t maxResourceBytes);
 
+SK_C_API void gr_direct_context_dump_memory_statistics(gr_direct_context_t* context, sk_trace_memory_dump_t *dump);
+
 // GrGLInterface
 
 SK_C_API const gr_glinterface_t* gr_glinterface_assemble_interface(void* ctx, gr_gl_get_proc get);

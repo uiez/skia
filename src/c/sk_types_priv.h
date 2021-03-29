@@ -12,7 +12,8 @@
 
 #include "include/c/sk_types.h"
 #include "include/core/SkTypes.h" // required to make sure SK_SUPPORT_GPU is defined
-#include "include/effects/SkImageFilters.h" // required to make sure SK_SUPPORT_GPU is defined
+#include "include/effects/SkImageFilters.h"
+#include "include/core/SkTraceMemoryDump.h"
 
 #define SK_SKIP_ARG__(keep, skip, ...) skip
 #define SK_SKIP_ARG_(args) SK_SKIP_ARG__ args
@@ -271,5 +272,34 @@ static inline GrD3DTextureResourceInfo AsGrD3DTextureResourceInfo(
 #endif  // SK_DIRECT3D
 
 #endif  // SK_SUPPORT_GPU
+
+class SkTraceMemoryDumpWrapper : public SkTraceMemoryDump {
+ public:
+  SkTraceMemoryDumpWrapper(sk_trace_memory_dump_t *dump): dump(dump){}
+
+  void dumpNumericValue(const char* dumpName,
+                        const char* valueName,
+                        const char* units,
+                        uint64_t value) override;
+
+  void dumpStringValue(const char* dumpName,
+                       const char* valueName,
+                       const char* value) override;
+
+  void setMemoryBacking(const char* dumpName,
+                        const char* backingType,
+                        const char* backingObjectId) override;
+
+  void setDiscardableMemoryBacking(
+      const char* dumpName,
+      const SkDiscardableMemory& discardableMemoryObject) override;
+
+  LevelOfDetail getRequestedDetails() const override;
+
+  bool shouldDumpWrappedObjects() const override;
+
+ private:
+    sk_trace_memory_dump_t *dump;
+};
 
 #endif

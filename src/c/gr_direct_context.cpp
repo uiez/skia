@@ -37,6 +37,11 @@ void gr_direct_context_set_resource_cache_limit(gr_direct_context_t* context, si
     SK_ONLY_GPU(AsGrDirectContext(context)->setResourceCacheLimit(maxResourceBytes));
 }
 
+void gr_direct_context_dump_memory_statistics(gr_direct_context_t* context, sk_trace_memory_dump_t *dump) {
+    SkTraceMemoryDumpWrapper dumper(dump);
+    SK_ONLY_GPU(AsGrDirectContext(context)->dumpMemoryStatistics(&dumper));
+}
+
 // GrGLInterface
 
 const gr_glinterface_t* gr_glinterface_assemble_interface(void* ctx, gr_gl_get_proc get) {

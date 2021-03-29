@@ -464,6 +464,15 @@ typedef struct {
     sk_save_layer_flags_t flags;
 } sk_save_layer_rec_t;
 
+typedef void (*sk_memory_dump_numeric_value_proc)(void *context, const char *category, const char *key, const char *unit, uint64_t value);
+typedef void (*sk_memory_dump_string_value_proc)(void *context, const char *category, const char *key, const char *value);
+typedef struct {
+    bool detail;
+    void *context;
+    sk_memory_dump_numeric_value_proc dumpNumericValue;
+    sk_memory_dump_string_value_proc dumpStringValue;
+} sk_trace_memory_dump_t;
+
 SK_C_PLUS_PLUS_END_GUARD
 
 #endif

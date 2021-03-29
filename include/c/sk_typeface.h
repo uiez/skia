@@ -17,7 +17,7 @@ SK_C_PLUS_PLUS_BEGIN_GUARD
 // typeface
 SK_C_API void sk_typeface_unref(sk_typeface_t* typeface);
 SK_C_API sk_font_id_t sk_typeface_get_unique_id(const sk_typeface_t* typeface);
-SK_C_API sk_fontstyle_t* sk_typeface_get_fontstyle(const sk_typeface_t* typeface);
+SK_C_API sk_fontstyle_t* sk_typeface_copy_fontstyle(const sk_typeface_t* typeface);
 SK_C_API sk_typeface_t* sk_typeface_create_default(void);
 SK_C_API sk_typeface_t* sk_typeface_create_from_file(const char* path, int index);
 SK_C_API sk_typeface_t* sk_typeface_create_from_data(sk_data_t* data, int index);
