@@ -11,6 +11,7 @@
 #include "include/core/SkMaskFilter.h"
 #include "include/core/SkPaint.h"
 #include "include/core/SkShader.h"
+#include "include/effects/SkDashPathEffect.h"
 
 #include "include/c/sk_paint.h"
 
@@ -48,6 +49,21 @@ void sk_paint_set_stroke_width(sk_paint_t* cpaint, float width) {
 
 void sk_paint_set_stroke_miter(sk_paint_t* cpaint, float miter) {
     AsPaint(cpaint)->setStrokeMiter(miter);
+}
+
+void sk_paint_set_stroke_line_dashs(sk_paint_t* cpaint, float *dashs, int dashCount, float dashOffset) {
+    if (dashCount ==0 || !dashs) {
+        AsPaint(cpaint)->setPathEffect(nullptr);
+    } else if (sizeof(SkScalar) == sizeof(float)) {
+        AsPaint(cpaint)->setPathEffect(SkDashPathEffect::Make((SkScalar*)dashs, dashCount, dashOffset));
+    } else {
+        SkScalar *sdashs = (SkScalar *)malloc(sizeof(SkScalar)*dashCount);
+        for (int i = 0; i < dashCount; i++) {
+            sdashs[i] = (SkScalar)dashs[i];
+        }
+        AsPaint(cpaint)->setPathEffect(SkDashPathEffect::Make(sdashs, dashCount, dashOffset));
+        free(sdashs);
+    }
 }
 
 void sk_paint_set_stroke_cap(sk_paint_t* cpaint, sk_stroke_cap_t ccap) {

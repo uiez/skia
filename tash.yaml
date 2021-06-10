@@ -67,10 +67,15 @@ templates:
       - >
         ARGS_DARWIN_COMMON=cc="clang"
         cxx="clang++"
-        skia_use_fonthost_mac=true
         skia_use_metal=true
         target_os="mac"
         extra_cflags=[${COMMON_CFLAGS_CLANG}, "-mmacosx-version-min=10.10"]
+      - >
+        ARGS_IOS_COMMON=cc="clang"
+        cxx="clang++"
+        target_os="ios"
+        skia_use_metal=true
+        extra_cflags=[${COMMON_CFLAGS_CLANG}]
       - >
         ARGS_ANDROID_COMMON=cc="clang"
         cxx="clang++"
@@ -81,11 +86,6 @@ templates:
         skia_use_system_freetype2=false
         skia_use_system_zlib=true
         skia_use_system_libpng=false
-        extra_cflags=[${COMMON_CFLAGS_CLANG}]
-      - >
-        ARGS_IOS_COMMON=cc="clang"
-        cxx="clang++"
-        target_os="ios"
         extra_cflags=[${COMMON_CFLAGS_CLANG}]
       - |
         ARGS_AMD64=target_cpu="x64"

@@ -21,6 +21,7 @@ SK_C_API void sk_paint_set_color(sk_paint_t*, sk_color_t);
 SK_C_API void sk_paint_set_style(sk_paint_t*, sk_paint_style_t);
 SK_C_API void sk_paint_set_stroke_width(sk_paint_t*, float width);
 SK_C_API void sk_paint_set_stroke_miter(sk_paint_t*, float miter);
+SK_C_API void sk_paint_set_stroke_line_dashs(sk_paint_t* cpaint, float *dashs, int dashCount, float dashOffset);
 SK_C_API void sk_paint_set_stroke_cap(sk_paint_t*, sk_stroke_cap_t);
 SK_C_API void sk_paint_set_stroke_join(sk_paint_t*, sk_stroke_join_t);
 SK_C_API void sk_paint_set_shader(sk_paint_t*, sk_shader_t*);
